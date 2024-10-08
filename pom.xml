@@ -4,7 +4,7 @@
     <artifactId>jgroups-raft</artifactId>
     <packaging>jar</packaging>
     <name>jgroups-raft</name>
-    <version>1.0.14.Final-SNAPSHOT</version>
+    <version>1.0.15.Final-SNAPSHOT</version>
     <url>https://github.com/jgroups-extras/jgroups-raft</url>
     <description>JGroups RAFT implementation</description>
 
@@ -24,9 +24,9 @@
         <!-- Dependencies versions -->
         <testng.version>7.10.2</testng.version>
         <assertj.version>3.26.3</assertj.version>
-        <jgroups.version>5.3.11.Final</jgroups.version>
+        <jgroups.version>5.3.13.Final</jgroups.version>
         <leveldbjni.version>1.8</leveldbjni.version>
-        <log4j.version>2.24.0</log4j.version>
+        <log4j.version>2.24.1</log4j.version>
         <jmh.version>1.37</jmh.version>
         <mashona.version>1.1.0</mashona.version>
 
@@ -367,7 +367,7 @@
                             <executable>java</executable>
                             <arguments>
                                 <argument>-classpath</argument>
-                                <classpath/>
+                                <classpath />
                                 <argument>org.jgroups.util.XMLSchemaGenerator</argument>
                                 <argument>-o</argument>
                                 <argument>${project.build.directory}/schema</argument>
@@ -525,7 +525,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.5.1</version>
                 </plugin>
 
                 <plugin>
@@ -606,7 +606,7 @@
                             <executable>java</executable>
                             <arguments>
                                 <argument>-classpath</argument>
-                                <classpath/>
+                                <classpath />
                                 <argument>org.jgroups.raft.util.PropsToAsciidoc</argument>
                                 <argument>${basedir}/doc/manual/protocols-template.adoc</argument>
                             </arguments>
