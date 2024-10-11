@@ -161,105 +161,105 @@ public class LockServiceTest extends BaseRaftChannelTest {
 		// lock 101
 		assertEquals(service_a.lock(101L).get(3, SECONDS), HOLDING);
 		events_a.next().assertEq(101L, NONE, HOLDING);
-		assertEquals(service_a.localStatus(101L), HOLDING);
+		assertEquals(service_a.lockStatus(101L), HOLDING);
 
 		assertEquals(service_b.lock(101L).get(3, SECONDS), WAITING);
 		events_b.next().assertEq(101L, NONE, WAITING);
-		assertEquals(service_b.localStatus(101L), WAITING);
+		assertEquals(service_b.lockStatus(101L), WAITING);
 
 		assertEquals(service_c.lock(101L).get(3, SECONDS), WAITING);
 		events_c.next().assertEq(101L, NONE, WAITING);
-		assertEquals(service_c.localStatus(101L), WAITING);
+		assertEquals(service_c.lockStatus(101L), WAITING);
 
 		// lock 102
 		assertEquals(service_b.lock(102L).get(3, SECONDS), HOLDING);
 		events_b.next().assertEq(102L, NONE, HOLDING);
-		assertEquals(service_b.localStatus(102L), HOLDING);
+		assertEquals(service_b.lockStatus(102L), HOLDING);
 
 		assertEquals(service_a.lock(102L).get(3, SECONDS), WAITING);
 		events_a.next().assertEq(102L, NONE, WAITING);
-		assertEquals(service_a.localStatus(102L), WAITING);
+		assertEquals(service_a.lockStatus(102L), WAITING);
 
 		assertEquals(service_c.lock(102L).get(3, SECONDS), WAITING);
 		events_c.next().assertEq(102L, NONE, WAITING);
-		assertEquals(service_c.localStatus(102L), WAITING);
+		assertEquals(service_c.lockStatus(102L), WAITING);
 
 		// lock 103
 		assertEquals(service_c.lock(103L).get(3, SECONDS), HOLDING);
 		events_c.next().assertEq(103L, NONE, HOLDING);
-		assertEquals(service_c.localStatus(103L), HOLDING);
+		assertEquals(service_c.lockStatus(103L), HOLDING);
 
 		assertEquals(service_a.lock(103L).get(3, SECONDS), WAITING);
 		events_a.next().assertEq(103L, NONE, WAITING);
-		assertEquals(service_a.localStatus(103L), WAITING);
+		assertEquals(service_a.lockStatus(103L), WAITING);
 
 		assertEquals(service_b.lock(103L).get(3, SECONDS), WAITING);
 		events_b.next().assertEq(103L, NONE, WAITING);
-		assertEquals(service_b.localStatus(103L), WAITING);
+		assertEquals(service_b.lockStatus(103L), WAITING);
 
 		// unlock 101
 		service_a.unlock(101L).get(3, SECONDS);
 
 		events_a.next().assertEq(101L, HOLDING, NONE);
-		assertEquals(service_a.localStatus(101L), NONE);
+		assertEquals(service_a.lockStatus(101L), NONE);
 
 		events_b.next().assertEq(101L, WAITING, HOLDING);
-		assertEquals(service_b.localStatus(101L), HOLDING);
+		assertEquals(service_b.lockStatus(101L), HOLDING);
 
 		// unlock 102
 		service_b.unlock(102L).get(3, SECONDS);
 
 		events_b.next().assertEq(102L, HOLDING, NONE);
-		assertEquals(service_b.localStatus(102L), NONE);
+		assertEquals(service_b.lockStatus(102L), NONE);
 
 		events_a.next().assertEq(102L, WAITING, HOLDING);
-		assertEquals(service_a.localStatus(102L), HOLDING);
+		assertEquals(service_a.lockStatus(102L), HOLDING);
 
 		// unlock 103
 		service_c.unlock(103L).get(3, SECONDS);
 
 		events_c.next().assertEq(103L, HOLDING, NONE);
-		assertEquals(service_c.localStatus(103L), NONE);
-		assertEquals(service_c.localStatus(102L), WAITING);
+		assertEquals(service_c.lockStatus(103L), NONE);
+		assertEquals(service_c.lockStatus(102L), WAITING);
 
 		events_a.next().assertEq(103L, WAITING, HOLDING);
-		assertEquals(service_a.localStatus(103L), HOLDING);
+		assertEquals(service_a.lockStatus(103L), HOLDING);
 
 		// unlock a
 		service_a.unlock().get(3, SECONDS);
 
 		events_a.next().assertEq(102L, HOLDING, NONE);
-		assertEquals(service_a.localStatus(102L), NONE);
+		assertEquals(service_a.lockStatus(102L), NONE);
 
 		events_a.next().assertEq(103L, HOLDING, NONE);
-		assertEquals(service_a.localStatus(103L), NONE);
+		assertEquals(service_a.lockStatus(103L), NONE);
 
 		events_c.next().assertEq(102L, WAITING, HOLDING);
-		assertEquals(service_c.localStatus(102L), HOLDING);
+		assertEquals(service_c.lockStatus(102L), HOLDING);
 
 		events_b.next().assertEq(103L, WAITING, HOLDING);
-		assertEquals(service_b.localStatus(103L), HOLDING);
+		assertEquals(service_b.lockStatus(103L), HOLDING);
 
 		// unlock b
 		service_b.unlock().get(3, SECONDS);
 
 		events_b.next().assertEq(101L, HOLDING, NONE);
-		assertEquals(service_b.localStatus(101L), NONE);
+		assertEquals(service_b.lockStatus(101L), NONE);
 
 		events_b.next().assertEq(103L, HOLDING, NONE);
-		assertEquals(service_b.localStatus(103L), NONE);
+		assertEquals(service_b.lockStatus(103L), NONE);
 
 		events_c.next().assertEq(101L, WAITING, HOLDING);
-		assertEquals(service_c.localStatus(101L), HOLDING);
+		assertEquals(service_c.lockStatus(101L), HOLDING);
 
 		// unlock c
 		service_c.unlock().get(3, SECONDS);
 
 		events_c.next().assertEq(101L, HOLDING, NONE);
-		assertEquals(service_c.localStatus(101L), NONE);
+		assertEquals(service_c.lockStatus(101L), NONE);
 
 		events_c.next().assertEq(102L, HOLDING, NONE);
-		assertEquals(service_c.localStatus(102L), NONE);
+		assertEquals(service_c.lockStatus(102L), NONE);
 	}
 
 	public void tryLock() throws Exception {
@@ -267,16 +267,16 @@ public class LockServiceTest extends BaseRaftChannelTest {
 
 		assertEquals(service_a.tryLock(101L).get(3, SECONDS), HOLDING);
 		events_a.next().assertEq(101L, NONE, HOLDING);
-		assertEquals(service_a.localStatus(101L), HOLDING);
+		assertEquals(service_a.lockStatus(101L), HOLDING);
 		assertEquals(service_a.tryLock(101L).get(3, SECONDS), HOLDING);
 
 		assertEquals(service_b.tryLock(101L).get(3, SECONDS), NONE);
 		assertNull(events_b.next(1));
-		assertEquals(service_b.localStatus(101L), NONE);
+		assertEquals(service_b.lockStatus(101L), NONE);
 
 		assertEquals(service_c.lock(101L).get(3, SECONDS), WAITING);
 		events_c.next().assertEq(101L, NONE, WAITING);
-		assertEquals(service_c.localStatus(101L), WAITING);
+		assertEquals(service_c.lockStatus(101L), WAITING);
 		assertEquals(service_c.tryLock(101L).get(3, SECONDS), WAITING);
 
 		service_a.unlock(101L);
@@ -367,8 +367,8 @@ public class LockServiceTest extends BaseRaftChannelTest {
 		events_b.next().assertEq(101L, NONE, WAITING);
 		events_c.next().assertEq(102L, NONE, WAITING);
 
-		assertEquals(service_a.localStatus(101L), HOLDING);
-		assertEquals(service_a.localStatus(102L), HOLDING);
+		assertEquals(service_a.lockStatus(101L), HOLDING);
+		assertEquals(service_a.lockStatus(102L), HOLDING);
 
 		// partition into subgroups without majority
 		partition(new int[]{0, 1}, new int[]{2}, new int[]{3, 4});
@@ -587,15 +587,15 @@ public class LockServiceTest extends BaseRaftChannelTest {
 			f = CompletableFuture.runAsync(() -> {
 				b.lock();
 				try {
-					assertEquals(service_b.localStatus(101), HOLDING);
+					assertEquals(service_b.lockStatus(101), HOLDING);
 				} finally {
 					b.unlock();
 				}
 			});
-			Util.waitUntil(5000, 1000, () -> service_b.localStatus(101) == WAITING);
+			Util.waitUntil(5000, 1000, () -> service_b.lockStatus(101) == WAITING);
 			service_b.unlock(101).get(3, SECONDS);
 			waitUntilNodesApplyAllLogs();
-			Util.waitUntil(5000, 1000, () -> service_b.localStatus(101) == WAITING);
+			Util.waitUntil(5000, 1000, () -> service_b.lockStatus(101) == WAITING);
 		} finally {
 			a.unlock();
 		}

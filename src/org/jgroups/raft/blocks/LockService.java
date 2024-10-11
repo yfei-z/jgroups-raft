@@ -372,11 +372,11 @@ public class LockService {
 	public boolean removeListener(Listener listener) { return listeners.remove(listener); }
 
 	/**
-	 * Get this member's lock status from local.
+	 * Get this member's lock status from local state.
 	 * @param lockId the lock's id
 	 * @return lock status
 	 */
-	public LockStatus localStatus(long lockId) {
+	public LockStatus lockStatus(long lockId) {
 		var v = lockStatus.get(lockId); return v == null ? NONE : v;
 	}
 
